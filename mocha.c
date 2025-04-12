@@ -4,9 +4,34 @@
 #include <linux/module.h>
 #include <linux/fs.h>
 
+static struct dentry *mochafs_mount(struct file_system_type *fs_type, int flags, const char *dev_name, void *data)
+{
+    struct dentry *root_dentry;
+
+    printk(KERN_INFO "mochafs: Mounting filesystem...\n");
+
+    root_dentry = mount_bdev(fs_type, flags, dev_name, data, NULL); // TODO: implement fill_super(now is NULL)
+
+    if (unlikely(IS_ERR(root_dentry))) {
+        printk(KERN_ERR "mochafs: Mount failed\n");
+    } else {
+        printk(KERN_INFO "mochafs: Mounted successfully on [%s]\n", dev_name);
+    }
+
+    return root_dentry;
+}
+
+static void mochafs_kill_superblock(struct super_block *sb)
+{
+    printk(KERN_INFO "mochafs: Superblock is destroyed. Unmount successful.\n");
+    kill_block_super(sb);
+}
+
 struct file_system_type mochafs_fs_type = {
     .name = "mochafs",
     .fs_flags = FS_REQUIRES_DEV,
+    .mount = mochafs_mount,
+    .kill_sb = mochafs_kill_superblock,
     .owner = THIS_MODULE,
 };
 
