@@ -16,5 +16,13 @@ clean:
 
 install:
 	sudo insmod mochafs.ko
+
 uninstall:
 	sudo rmmod mochafs.ko
+
+test:
+	dd bs=4096 count=100 if=/dev/zero of=image
+	sudo mount -o loop -t mochafs image /mnt
+	cat /mnt/testfile
+	sudo umount /mnt
+	sudo dmesg | tail -n 20
