@@ -22,6 +22,7 @@ uninstall:
 
 test:
 	dd bs=4096 count=100 if=/dev/zero of=image
+	./mkfs-mochafs image
 	sudo mount -o loop -t mochafs image /mnt
 	cat /mnt/testfile
 	sudo umount /mnt

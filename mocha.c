@@ -42,6 +42,13 @@ static int mochafs_fill_super(struct super_block *sb, void *data, int silent)
     sb->s_fs_info = sb_disk;
     sb->s_maxbytes = MOCHAFS_BLOCKSIZE;
 
+    if (!sb->s_root) {
+        ret = -ENOMEM;
+        goto release;
+    }
+
+    ret = 0; // Success
+
 release:
     brelse(bh);
 
