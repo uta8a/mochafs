@@ -4,6 +4,7 @@ Current status:
 
 - [x] loadable as a kernel module
 - [x] mountable
+- [ ] unmountable
 - [ ] read/write
 
 ```plaintext
